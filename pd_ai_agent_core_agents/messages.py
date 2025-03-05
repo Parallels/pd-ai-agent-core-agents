@@ -1,0 +1,3 @@
+HEALTH_CHECK_TEST_DETECT_BLACK_SCREEN = "health_check.detect_black_screen"
+HEALTH_CHECK_TEST_DETECT_GUEST_TOOLS = "health_check.detect_guest_tools"
+HEALTH_CHECK_TEST_DETECT_INTERNET_CONNECTION = "health_check.detect_internet_connection"
