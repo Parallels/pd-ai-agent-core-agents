@@ -7,6 +7,7 @@ from pd_ai_agent_core.core_types.llm_chat_ai_agent import (
 from pd_ai_agent_core.services.service_registry import ServiceRegistry
 from pd_ai_agent_core.services.notification_service import NotificationService
 from pd_ai_agent_core.services.log_service import LogService
+from pd_ai_agent_core.services.vm_datasource_service import VmDatasourceService
 from pd_ai_agent_core.messages import (
     create_agent_function_call_chat_message,
     create_clean_agent_function_call_chat_message,
@@ -21,6 +22,7 @@ from pd_ai_agent_core.helpers import (
 from pd_ai_agent_core.common import (
     NOTIFICATION_SERVICE_NAME,
     LOGGER_SERVICE_NAME,
+    VM_DATASOURCE_SERVICE_NAME,
 )
 
 logger = logging.getLogger(__name__)
@@ -96,7 +98,7 @@ class GetVmsAgent(LlmChatAgent):
             name="VM List Agent",
             instructions=GET_VMS_AGENT_PROMPT,
             description="This agent is responsible for listing all VMs, or listing a specific VM or listing the details of a specific VM or all VMs.",
-            functions=[self.get_vms_lists, self.get_vm_details],
+            functions=[self.get_vms_lists, self.get_vm_details],  # type: ignore
             function_descriptions=[
                 AgentFunctionDescriptor(
                     name=self.get_vms_lists.__name__,
@@ -112,7 +114,7 @@ class GetVmsAgent(LlmChatAgent):
 
     def get_vms_lists(
         self, session_context: dict, context_variables: dict
-    ) -> LlmChatResult:
+    ) -> LlmChatAgentResponse:
         """List or get details of all VMs.
         Args:
             session_context (dict): The context of the session.
@@ -143,8 +145,14 @@ class GetVmsAgent(LlmChatAgent):
                 arguments={},
             )
         )
+        data = ServiceRegistry.get(
+            session_context["session_id"],
+            VM_DATASOURCE_SERVICE_NAME,
+            VmDatasourceService,
+        )
         try:
-            vmsResult = get_vms()
+            vmsResult = data.datasource.get_all_vms()
+            vmsResultDict = json.loads(json.dumps(vmsResult))
             ls.debug(
                 session_context["channel"],
                 f"Listing VMs, result: {vmsResult}",
@@ -154,7 +162,7 @@ class GetVmsAgent(LlmChatAgent):
                     session_context["channel"],
                     "vms",
                     "info",
-                    vmsResult.vms,
+                    vmsResultDict,
                 )
 
             ns.send_sync(
@@ -165,7 +173,7 @@ class GetVmsAgent(LlmChatAgent):
             return LlmChatAgentResponse(
                 status="success",
                 message="VMs listed successfully",
-                data=vmsResult.vms,
+                data=vmsResultDict,
             )
         except subprocess.CalledProcessError as e:
             ns.send_sync(
@@ -192,7 +200,7 @@ class GetVmsAgent(LlmChatAgent):
 
     def get_vm_details(
         self, session_context: dict, context_variables: dict, vm_id: str
-    ) -> LlmChatResult:
+    ) -> LlmChatAgentResponse:
         """Get details of a specific VM.
         Args:
             vm_id (str): The ID or name of the virtual machine to get details of.
@@ -235,7 +243,19 @@ class GetVmsAgent(LlmChatAgent):
                 )
             vm_id = context_vm_id
         try:
-            vm = get_vm(vm_id)
+            data = ServiceRegistry.get(
+                session_context["session_id"],
+                VM_DATASOURCE_SERVICE_NAME,
+                VmDatasourceService,
+            )
+            vm = data.datasource.get_vm(vm_id)
+            vmDict = json.loads(json.dumps(vm))
+            if not vm:
+                return LlmChatAgentResponse(
+                    status="error",
+                    message=f"VM {vm_id} not found",
+                    error="VM not found",
+                )
             ls.debug(
                 session_context["channel"],
                 f"Listing VM, result: {vm}",
@@ -245,7 +265,7 @@ class GetVmsAgent(LlmChatAgent):
                     session_context["channel"],
                     "vm",
                     "info",
-                    vm.vm,
+                    vmDict,
                 )
 
             ns.send_sync(
@@ -256,7 +276,7 @@ class GetVmsAgent(LlmChatAgent):
             return LlmChatAgentResponse(
                 status="success",
                 message=f"VM {vm_id} details retrieved successfully",
-                data=vm.vm,
+                data=vmDict,
             )
         except subprocess.CalledProcessError as e:
             ns.send_sync(
