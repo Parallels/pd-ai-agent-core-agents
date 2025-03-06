@@ -152,7 +152,7 @@ class GetVmsAgent(LlmChatAgent):
         )
         try:
             vmsResult = data.datasource.get_all_vms()
-            vmsResultDict = json.loads(json.dumps(vmsResult))
+            dictResults = [vm.to_dict() for vm in vmsResult]
             ls.debug(
                 session_context["channel"],
                 f"Listing VMs, result: {vmsResult}",
@@ -162,7 +162,7 @@ class GetVmsAgent(LlmChatAgent):
                     session_context["channel"],
                     "vms",
                     "info",
-                    vmsResultDict,
+                    dictResults,
                 )
 
             ns.send_sync(
@@ -173,7 +173,7 @@ class GetVmsAgent(LlmChatAgent):
             return LlmChatAgentResponse(
                 status="success",
                 message="VMs listed successfully",
-                data=vmsResultDict,
+                data=dictResults,
             )
         except subprocess.CalledProcessError as e:
             ns.send_sync(
@@ -195,6 +195,17 @@ class GetVmsAgent(LlmChatAgent):
             return LlmChatAgentResponse(
                 status="error",
                 message=f"Failed to parse VM list output: {e}",
+                error=str(e),
+            )
+        except Exception as e:
+            ns.send_sync(
+                create_clean_agent_function_call_chat_message(
+                    session_context["session_id"], session_context["channel"]
+                )
+            )
+            return LlmChatAgentResponse(
+                status="error",
+                message=f"Failed to list VMs: {e}",
                 error=str(e),
             )
 
@@ -249,7 +260,6 @@ class GetVmsAgent(LlmChatAgent):
                 VmDatasourceService,
             )
             vm = data.datasource.get_vm(vm_id)
-            vmDict = json.loads(json.dumps(vm))
             if not vm:
                 return LlmChatAgentResponse(
                     status="error",
@@ -265,7 +275,7 @@ class GetVmsAgent(LlmChatAgent):
                     session_context["channel"],
                     "vm",
                     "info",
-                    vmDict,
+                    vm.to_dict(),
                 )
 
             ns.send_sync(
@@ -276,7 +286,7 @@ class GetVmsAgent(LlmChatAgent):
             return LlmChatAgentResponse(
                 status="success",
                 message=f"VM {vm_id} details retrieved successfully",
-                data=vmDict,
+                data=vm.to_dict(),
             )
         except subprocess.CalledProcessError as e:
             ns.send_sync(
@@ -308,5 +318,16 @@ class GetVmsAgent(LlmChatAgent):
             return LlmChatAgentResponse(
                 status="error",
                 message=f"Failed to parse VM {vm_id} output: {e}",
+                error=str(e),
+            )
+        except Exception as e:
+            ns.send_sync(
+                create_clean_agent_function_call_chat_message(
+                    session_context["session_id"], session_context["channel"]
+                )
+            )
+            return LlmChatAgentResponse(
+                status="error",
+                message=f"Failed to get VM {vm_id}: {e}",
                 error=str(e),
             )
