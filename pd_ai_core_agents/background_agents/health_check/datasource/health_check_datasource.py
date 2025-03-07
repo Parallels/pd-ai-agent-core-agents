@@ -1,7 +1,9 @@
 from typing import Dict, Optional
 import logging
 from datetime import datetime, timedelta
-from background_agents.health_check_agent.vm_health_check import VmHealthCheck
+from pd_ai_core_agents.background_agents.health_check.vm_health_check import (
+    VmHealthCheck,
+)
 
 logger = logging.getLogger(__name__)
 

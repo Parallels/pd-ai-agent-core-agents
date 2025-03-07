@@ -1,15 +1,15 @@
 from datetime import datetime
 from typing import List
-from pd_ai_agent_core_agents.background_agents.health_check_agent.vm_health_check_test import (
+from .vm_health_check_test import (
     VMHealthCheckTest,
 )
-from pd_ai_agent_core_agents.background_agents.health_check_agent.health_checks.detect_black_screen import (
+from .health_checks.detect_black_screen import (
     DetectBlackScreenHealthCheckTest,
 )
-from pd_ai_agent_core_agents.background_agents.health_check_agent.health_checks.detect_guest_tools import (
+from .health_checks.detect_guest_tools import (
     DetectGuestToolsHealthCheckTest,
 )
-from pd_ai_agent_core_agents.background_agents.health_check_agent.health_checks.detect_internet_connection import (
+from .health_checks.detect_internet_connection import (
     DetectInternetConnectionHealthCheckTest,
 )
 from pd_ai_agent_core.parallels_desktop import VirtualMachine
