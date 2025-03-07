@@ -1,6 +1,5 @@
 from pd_ai_agent_core.core_types.llm_chat_ai_agent import (
     LlmChatAgent,
-    LlmChatResult,
     LlmChatAgentResponse,
     AgentFunctionDescriptor,
 )
@@ -8,7 +7,6 @@ from pd_ai_agent_core.services.service_registry import ServiceRegistry
 from pd_ai_agent_core.services.notification_service import NotificationService
 from pd_ai_agent_core.services.log_service import LogService
 
-from pd_ai_agent_core.services.vm_datasource_service import VmDatasourceService
 from pd_ai_agent_core.messages import (
     create_agent_function_call_chat_message,
     create_clean_agent_function_call_chat_message,
@@ -21,7 +19,6 @@ from pd_ai_agent_core.helpers import (
 from pd_ai_agent_core.common import (
     NOTIFICATION_SERVICE_NAME,
     LOGGER_SERVICE_NAME,
-    VM_DATASOURCE_SERVICE_NAME,
 )
 from pd_ai_core_agents.llm_agents.helpers import get_vm_details
 from pd_ai_agent_core.parallels_desktop.clone_vm import clone_vm
@@ -80,7 +77,7 @@ class CreateVmAgent(LlmChatAgent):
             name="Create VM Agent",
             instructions=CREATE_VM_PROMPT,
             description="This agent is responsible for creating a VM.",
-            functions=[self.create_vm],  # type: ignore
+            functions=[self.create_vm_tool],  # type: ignore
             function_descriptions=[
                 AgentFunctionDescriptor(
                     name=self.create_vm_tool.__name__,

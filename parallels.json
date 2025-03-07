@@ -41,7 +41,7 @@
       "name": "Tech Support Agent",
       "description": "Agent for providing technical support",
       "type": "chat_agent",
-      "module_path": "pd_ai_core_agents.llm_agents.tech_support",
+      "module_path": "pd_ai_core_agents.llm_agents.tech_support_agent",
       "class_name": "TechSupportAgent"
     },
     {
@@ -49,7 +49,7 @@
       "name": "VM Health Check Agent",
       "description": "Agent for checking the health of a VM",
       "type": "chat_agent",
-      "module_path": "pd_ai_core_agents.llm_agents.vm_healthcheck",
+      "module_path": "pd_ai_core_agents.llm_agents.vm_healthcheck_agent",
       "class_name": "VmHealthCheckAgent"
     },
     {
@@ -57,7 +57,7 @@
       "name": "VM Operations Agent",
       "description": "Agent for starting, stopping, suspending, resuming, pausing, or deleting a VM",
       "type": "chat_agent",
-      "module_path": "pd_ai_core_agents.llm_agents.vm_operations",
+      "module_path": "pd_ai_core_agents.llm_agents.vm_operations_agent",
       "class_name": "VmOperationsAgent"
     },
     {
@@ -65,7 +65,7 @@
       "name": "Webpage Analyzer Agent",
       "description": "Agent for analyzing webpages for what the user is trying to achieve",
       "type": "chat_agent",
-      "module_path": "pd_ai_core_agents.llm_agents.webpage_analyzer",
+      "module_path": "pd_ai_core_agents.llm_agents.webpage_analyzer_agent",
       "class_name": "WebpageAnalyzerAgent"
     }
   ],
