@@ -74,7 +74,7 @@ Call this function if the user is asking you to analyse the VM, get a health che
 """
 
 
-class ExecuteOnVmAgent(LlmChatAgent):
+class VmHealthCheckAgent(LlmChatAgent):
     def __init__(self):
         super().__init__(
             name="Execute On VM Agent",

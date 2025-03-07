@@ -5,20 +5,68 @@
   "tag": "v0.0.1",
   "agent_definitions": [
     {
-      "id": "system_monitor_agent",
-      "name": "System Monitor Agent",
-      "description": "Background agent for monitoring system resources",
+      "id": "pd_core_agents_vm_health_check_agent",
+      "name": "VM Health Check Agent",
+      "description": "Background agent for monitoring VM health",
       "type": "background_agent",
-      "module_path": "agents.example_agent",
-      "class_name": "SystemMonitorAgent"
+      "module_path": "pd_ai_core_agents.background_agents.health_check.health_check_agent",
+      "class_name": "VmHealthCheckAgent"
     },
     {
-      "id": "notification_agent",
-      "name": "Notification Agent",
-      "description": "Background agent for handling system notifications",
-      "type": "background_agent",
-      "module_path": "agents.notification_agent",
-      "class_name": "NotificationAgent"
+      "id": "pd_core_agents_list_vms_agent",
+      "name": "List VMs Agent",
+      "description": "Agent for listing available VMs",
+      "type": "chat_agent",
+      "module_path": "pd_ai_core_agents.llm_agents.get_vms_agent",
+      "class_name": "GetVmsAgent"
+    },
+    {
+      "id": "pd_core_agents_create_vm_agent",
+      "name": "Create VM Agent",
+      "description": "Agent for creating a new VM",
+      "type": "chat_agent",
+      "module_path": "pd_ai_core_agents.llm_agents.create_vm_agent",
+      "class_name": "CreateVmAgent"
+    },
+    {
+      "id": "pd_core_agents_execute_on_vms_agent",
+      "name": "Execute on VMs Agent",
+      "description": "Agent for executing a command on a VM",
+      "type": "chat_agent",
+      "module_path": "pd_ai_core_agents.llm_agents.execute_on_vm_agent",
+      "class_name": "ExecuteOnVmAgent"
+    },
+    {
+      "id": "pd_core_agents_tech_support_agent",
+      "name": "Tech Support Agent",
+      "description": "Agent for providing technical support",
+      "type": "chat_agent",
+      "module_path": "pd_ai_core_agents.llm_agents.tech_support",
+      "class_name": "TechSupportAgent"
+    },
+    {
+      "id": "pd_core_agents_vm_health_check_agent",
+      "name": "VM Health Check Agent",
+      "description": "Agent for checking the health of a VM",
+      "type": "chat_agent",
+      "module_path": "pd_ai_core_agents.llm_agents.vm_healthcheck",
+      "class_name": "VmHealthCheckAgent"
+    },
+    {
+      "id": "pd_core_agents_vm_operations_agent",
+      "name": "VM Operations Agent",
+      "description": "Agent for starting, stopping, suspending, resuming, pausing, or deleting a VM",
+      "type": "chat_agent",
+      "module_path": "pd_ai_core_agents.llm_agents.vm_operations",
+      "class_name": "VmOperationsAgent"
+    },
+    {
+      "id": "pd_core_agents_webpage_analyzer_agent",
+      "name": "Webpage Analyzer Agent",
+      "description": "Agent for analyzing webpages for what the user is trying to achieve",
+      "type": "chat_agent",
+      "module_path": "pd_ai_core_agents.llm_agents.webpage_analyzer",
+      "class_name": "WebpageAnalyzerAgent"
     }
   ],
   "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1hY3Rpdml0eSI+PHBhdGggZD0iTTIyIDEyaC00bC0zIDlMOSAzIDYgMTJIMiIvPjwvc3ZnPg==",

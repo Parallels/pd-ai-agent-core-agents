@@ -74,7 +74,7 @@ Call this function if the user is asking you to create a VM.
 """
 
 
-class ExecuteOnVmAgent(LlmChatAgent):
+class CreateVmAgent(LlmChatAgent):
     def __init__(self):
         super().__init__(
             name="Create VM Agent",
