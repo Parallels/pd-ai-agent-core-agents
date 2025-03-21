@@ -22,6 +22,9 @@ from pd_ai_agent_core.services.log_service import LogService
 from pd_ai_core_agents.background_agents.health_check.datasource.health_check_datasource import (
     HealthCheckDataSource,
 )
+from pd_ai_core_agents.background_agents.health_check.vm_health_check import (
+    VmHealthCheck,
+)
 from pd_ai_agent_core.messages import (
     create_success_notification_message,
     VM_STATE_STARTED,
@@ -64,7 +67,7 @@ class VmHealthCheckAgent(BackgroundAgent):
         try:
             vms = self._vm_datasource.get_vms_by_state("running")
             for vm in vms:
-                logger.info(f"Checking health of VM {vm.name}")
+                logger.info(f"Checking health of VM1 {vm.name}")
                 await self._process_health_check(vm.id)
         except Exception as e:
             logger.error(f"Error in VM monitor periodic check: {e}")
@@ -111,4 +114,18 @@ class VmHealthCheckAgent(BackgroundAgent):
             return
         vm = self._vm_datasource.get_vm(vm_id)
         if vm and vm.state == "running":
-            pass
+            logger.info(f"Checking health of VM2 {vm.name}")
+            health_check = self._health_check_datasource.get_health_check(vm_id)
+            if not health_check:
+                health_check = VmHealthCheck(vm_id=vm_id, last_update=datetime.now())
+                health_check.register_default_tests(self.session_id, vm)
+                self._health_check_datasource.update_health_check(
+                    vm_id=vm_id, health_check=health_check
+                )
+            await health_check.run_tests()
+            if not health_check.is_healthy():
+                logger.error(f"VM {vm_id} is not healthy: {health_check.get_reason()}")
+                return
+            self._health_check_datasource.update_health_check(
+                vm_id=vm_id, health_check=health_check
+            )

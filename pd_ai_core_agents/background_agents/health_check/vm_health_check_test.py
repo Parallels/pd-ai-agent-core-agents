@@ -60,12 +60,14 @@ class VMHealthCheckTest(ABC):
         if is_healthy:
             if self._count > 0:
                 msg = self._recovery_message()
+                logger.info(f"Sending recovery message: {msg}")
                 await self.notifications_service.send(msg)
             self._count = 0
             return True, ""
         self._count += 1
         if self._count >= self.count_for_failure:
             msg = self._failure_message()
+            logger.info(f"Sending failure message: {msg}")
             await self.notifications_service.send(msg)
         return False, reason
 
