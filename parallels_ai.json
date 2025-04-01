@@ -1,8 +1,10 @@
 {
-  "name": "parallels-core-agents",
-  "description": "Parallels Desktop Core Agents that will allow the usage of AI in the Parallels Desktop ecosystem.",
+  "id": "parallels-core-agents",
+  "name": "Parallels Core Agents",
+  "short_description": "Parallels Desktop Core Agents that will allow the usage of AI in the Parallels Desktop ecosystem.",
+  "long_description": "Parallels Desktop Core Agents that will allow the usage of AI in the Parallels Desktop ecosystem.",
   "repo_url": "https://github.com/Parallels/pd-ai-agent-core-agents",
-  "tag": "v0.0.1",
+  "version": "0.0.1",
   "agent_definitions": [
     {
       "id": "pd_core_agents_vm_health_check_agent",
@@ -70,7 +72,7 @@
     }
   ],
   "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1hY3Rpdml0eSI+PHBhdGggZD0iTTIyIDEyaC00bC0zIDlMOSAzIDYgMTJIMiIvPjwvc3ZnPg==",
-  "author": "Parallels Desktop Team",
+  "author": "Parallels Desktop",
   "categories": [
     "system",
     "monitoring",
