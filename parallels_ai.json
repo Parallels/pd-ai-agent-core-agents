@@ -4,7 +4,7 @@
   "short_description": "Parallels Desktop Core Agents that will allow the usage of AI in the Parallels Desktop ecosystem.",
   "long_description": "Parallels Desktop Core Agents that will allow the usage of AI in the Parallels Desktop ecosystem.",
   "repo_url": "https://github.com/Parallels/pd-ai-agent-core-agents",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "agent_definitions": [
     {
       "id": "pd_core_agents_vm_health_check_agent",
