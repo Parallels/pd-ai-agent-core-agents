@@ -1,6 +1,5 @@
 from pd_ai_agent_core.core_types.llm_chat_ai_agent import (
     LlmChatAgent,
-    LlmChatResult,
     LlmChatAgentResponse,
     AgentFunctionDescriptor,
     AttachmentContextVariable,
@@ -16,10 +15,7 @@ from pd_ai_agent_core.messages import (
     create_agent_function_call_chat_message,
     create_clean_agent_function_call_chat_message,
 )
-import json
 import logging
-from pd_ai_agent_core.parallels_desktop.get_vms import get_vm
-from pd_ai_agent_core.parallels_desktop.execute_on_vm import execute_on_vm
 from pd_ai_agent_core.helpers import (
     get_context_variable,
 )
@@ -31,9 +27,7 @@ from pd_ai_agent_core.common import (
     OCR_SERVICE_NAME,
 )
 import openai
-from pd_ai_agent_core.core_types.llm_chat_ai_agent import (
-    LlmChatAgentResponseAction,
-)
+
 
 logger = logging.getLogger(__name__)
 
@@ -265,7 +259,7 @@ class ScreenshotOcrAgent(LlmChatAgent):
                 )
 
             attachment = AttachmentContextVariable(
-                name="screenshot",
+                name="Screenshot.png",
                 id="screenshot",
                 type=AttachmentType.IMAGE,
                 value=screenshot.screenshot,
@@ -274,7 +268,7 @@ class ScreenshotOcrAgent(LlmChatAgent):
                 status="success",
                 message=analysis,
                 actions=[],
-                context_variables={"screenshot": attachment},
+                attachments=[attachment],
             )
 
         except Exception as e:
