@@ -38,7 +38,8 @@ class DetectInternetConnectionHealthCheckTest(VMHealthCheckTest):
         )
 
     async def _check_function(self) -> Tuple[bool, str]:
-        execution_result = execute_on_vm(self.vm.id, "ping -c 1 google.com")
+        args = ["-c", "1", "google.com"]
+        execution_result = execute_on_vm(self.vm.id, "ping", args)
         if execution_result.exit_code != 0:
             logger.error(
                 f"Error pinging google.com for VM {self.vm.id}: {execution_result.error}"

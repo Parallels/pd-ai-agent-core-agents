@@ -24,6 +24,7 @@ from pd_ai_agent_core.messages import (
 from pd_ai_core_agents.common.messages import (
     HEALTH_CHECK_TEST_DETECT_GUEST_TOOLS,
 )
+from pd_ai_agent_core.parallels_desktop.os import get_std_os
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,20 @@ class DetectGuestToolsHealthCheckTest(VMHealthCheckTest):
         )
 
     async def _check_function(self) -> Tuple[bool, str]:
-        execution_result = execute_on_vm(self.vm.id, "echo 'hello'")
+        args = ["hello"]
+        cmd = "echo"
+        os = get_std_os(self.vm.os)
+        if os is None:
+            return False, "Error getting guest tools"
+
+        if os == "windows":
+            cmd = "cmd"
+            args = ["/c", "echo", "hello"]
+        else:
+            cmd = "echo"
+            args = ["hello"]
+
+        execution_result = execute_on_vm(self.vm.id, cmd, args)
         if execution_result.exit_code != 0:
             logger.error(
                 f"Error getting guest tools for VM {self.vm.id}: {execution_result.error}"

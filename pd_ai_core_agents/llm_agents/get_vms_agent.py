@@ -87,8 +87,9 @@ If the user has provided a vm name, use it on your responses to the user to iden
 
 GET_VMS_AGENT_TRANSFER_INSTRUCTIONS = """
 Call this function if the user is asking you to list all VMs, or list a specific VM or list the details of a specific VM or all VMs.
-
-You can also call this function if the user is asking you to get the OS version of a VM.
+You can also call this function if the user is asking you to get the OS version of a VM or simple operations like count vms, count memory, count cpu, count states.
+For example:
+if a user asks you to count the number of VMs, you can call this function to list the vms and then count them. same for memory, cpu, states, etc.
 """
 
 
@@ -153,18 +154,11 @@ class GetVmsAgent(LlmChatAgent):
         )
         try:
             vmsResult = data.datasource.get_all_vms()
-            dictResults = [vm.to_dict() for vm in vmsResult]
+            dictResults = [vm.to_short_dict() for vm in vmsResult]
             ls.debug(
                 session_context["channel"],
                 f"Listing VMs, result: {vmsResult}",
             )
-            if session_context["session_id"] and ns is not None:
-                ns.send_event_sync(
-                    session_context["channel"],
-                    "vms",
-                    "info",
-                    dictResults,
-                )
 
             ns.send_sync(
                 create_clean_agent_function_call_chat_message(
@@ -271,13 +265,6 @@ class GetVmsAgent(LlmChatAgent):
                 session_context["channel"],
                 f"Listing VM, result: {vm}",
             )
-            if session_context["session_id"] and ns is not None:
-                ns.send_event_sync(
-                    session_context["channel"],
-                    "vm",
-                    "info",
-                    vm.to_dict(),
-                )
 
             ns.send_sync(
                 create_clean_agent_function_call_chat_message(
@@ -287,7 +274,7 @@ class GetVmsAgent(LlmChatAgent):
             return LlmChatAgentResponse(
                 status="success",
                 message=f"VM {vm_id} details retrieved successfully",
-                data=vm.to_dict(),
+                data=vm.to_short_dict(),
             )
         except subprocess.CalledProcessError as e:
             ns.send_sync(
